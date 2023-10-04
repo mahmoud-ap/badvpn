@@ -1,7 +1,6 @@
 #!/bin/sh
 sudo wget -O /usr/bin/badvpn-udpgw "https://raw.githubusercontent.com/mahmoud-ap/badvpn/master/badvpn-udpgw"
 sudo touch /etc/rc.local
-sudo nano /etc/rc.local
 
 cat >  /etc/rc.local << ENDOFFILE
 #!/bin/sh -e
