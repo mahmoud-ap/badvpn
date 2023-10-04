@@ -1,7 +1,9 @@
 
 #### Installation
 
-Installation: `wget https://raw.githubusercontent.com/669800/badvpn/master/easyinstall && bash easyinstall`
+```
+wget https://raw.githubusercontent.com/mahmoud-ap/badvpn/master/easyinstall && bash easyinstall
+```
 
 ##### Use
 
