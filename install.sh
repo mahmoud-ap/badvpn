@@ -1,14 +1,28 @@
 #!/bin/sh
-sudo wget -O /usr/bin/badvpn-udpgw "https://raw.githubusercontent.com/mahmoud-ap/badvpn/master/badvpn-udpgw"
-sudo touch /etc/rc.local
 
-cat >  /etc/rc.local << ENDOFFILE
-#!/bin/sh -e
-screen -AmdS badvpn badvpn-udpgw --listen-addr 127.0.0.1:7300
-exit 0
+username="useradd -m videocall"
+if id "$username" &>/dev/null; then
+    echo "videocall is installed."
+else
+    sudo wget -O /usr/bin/badvpn-udpgw "https://raw.githubusercontent.com/mahmoud-ap/badvpn/master/badvpn-udpgw"
+    mv -f ./badvpn-udpgw /usr/bin/badvpn-udpgw
+    chmod 777 /usr/bin/badvpn-udpgw
+    useradd -m videocall
+fi
+
+cat >  /etc/systemd/system/videocall.service << ENDOFFILE
+[Unit]
+Description=UDP forwarding for badvpn-tun2socks
+After=nss-lookup.target
+
+[Service]
+ExecStart=/usr/bin/badvpn-udpgw --loglevel none --listen-addr 127.0.0.1:7301 --max-clients 999
+User=videocall
+
+[Install]
+WantedBy=multi-user.target
 ENDOFFILE
 
-chmod +x /etc/rc.local
-sudo systemctl status rc-local.service
-sudo chmod +x /usr/bin/badvpn-udpgw
-sudo screen -AmdS badvpn badvpn-udpgw --listen-addr 127.0.0.1:7300
+systemctl enable videocall
+systemctl start videocall
+   
